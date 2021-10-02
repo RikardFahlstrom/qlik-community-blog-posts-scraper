@@ -1,0 +1,9 @@
+pandas
+requests
+beautifulsoup4
+sqlalchemy
+pre-commit
+mypy
+types-requests
+tqdm
+datasette
