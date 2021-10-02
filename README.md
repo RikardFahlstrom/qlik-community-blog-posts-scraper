@@ -20,6 +20,6 @@ _Download metadata and links for all Qlik community blog posts into a Sqlite dat
 - Run `python program.py` in order to create `qlik_posts.db`
 
 ### Usage
-- Create Docker image `datasette package --install datasette-vega qlik_posts.db -t datasette_qlikposts`
+- Create Docker image `docker build -t datasette_qlikposts .`
 - Run container `docker run -d --rm -p 8081:8001 --name datasette_qlik datasette_qlikposts`
 - Explore data at `http://localhost:8081/`
