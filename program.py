@@ -18,6 +18,8 @@ class Blogpost:
     likes: int
     views: int
     url: str
+    department: str
+    headline: str
     publish_date: datetime.date
     scraped_date: datetime.date = datetime.date.today()
 
@@ -96,12 +98,17 @@ def extract_blog_post_metadata(
                 .split("/")[0]
             )
 
+            headline = litag.find("h3").find("a").string
+            department = litag.find("p", {"class": "board-heading"}).string
+
             all_posts_on_page.append(
                 Blogpost(
                     author=author,
                     likes=num_likes,
                     views=num_views,
                     url=url,
+                    department=department,
+                    headline=headline,
                     publish_date=datetime.datetime.strptime(
                         created_date.strip(), "%Y-%m-%d"
                     ).date(),
