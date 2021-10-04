@@ -114,7 +114,7 @@ def extract_blog_post_metadata(
 def create_dataframe_from_blog_posts(
     structured_metadata: List[Blogpost]
 ) -> pd.DataFrame:
-    return pd.DataFrame(structured_metadata)
+    return pd.DataFrame([blogpost.__dict__ for blogpost in structured_metadata])
 
 
 def connect_and_store_metadata_to_db(df_with_blog_post_data: pd.DataFrame):
