@@ -18,6 +18,8 @@ class Blogpost:
     likes: int
     views: int
     url: str
+    department: str
+    headline: str
     publish_date: datetime.date
     scraped_date: datetime.date = datetime.date.today()
 
@@ -96,12 +98,17 @@ def extract_blog_post_metadata(
                 .split("/")[0]
             )
 
+            headline = litag.find("h3").find("a").string
+            department = litag.find("p", {"class": "board-heading"}).string
+
             all_posts_on_page.append(
                 Blogpost(
                     author=author,
                     likes=num_likes,
                     views=num_views,
                     url=url,
+                    department=department,
+                    headline=headline,
                     publish_date=datetime.datetime.strptime(
                         created_date.strip(), "%Y-%m-%d"
                     ).date(),
@@ -114,7 +121,7 @@ def extract_blog_post_metadata(
 def create_dataframe_from_blog_posts(
     structured_metadata: List[Blogpost]
 ) -> pd.DataFrame:
-    return pd.DataFrame(structured_metadata)
+    return pd.DataFrame([blogpost.__dict__ for blogpost in structured_metadata])
 
 
 def connect_and_store_metadata_to_db(df_with_blog_post_data: pd.DataFrame):
