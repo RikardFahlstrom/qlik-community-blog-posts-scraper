@@ -41,7 +41,7 @@ def main():
     flat_list = flatten_nested_list(all_blog_posts)
     df = create_dataframe_from_blog_posts(flat_list)
 
-    connect_and_store_metadata_to_db(df)
+    connect_and_store_metadata_to_db(df, "qlik_community")
 
 
 def query_page_with_blog_posts(url_to_scrape: str) -> BeautifulSoup:
@@ -117,11 +117,13 @@ def create_dataframe_from_blog_posts(
     return pd.DataFrame(structured_metadata)
 
 
-def connect_and_store_metadata_to_db(df_with_blog_post_data: pd.DataFrame):
+def connect_and_store_metadata_to_db(
+    df_with_blog_post_data: pd.DataFrame, table_name: str
+):
     engine = create_engine("sqlite:///qlik_posts.db", echo=False)
     sqlite_connection = engine.connect()
 
-    sqlite_table = "posts"
+    sqlite_table = table_name
     df_with_blog_post_data.to_sql(
         sqlite_table, sqlite_connection, if_exists="replace", index=False
     )
