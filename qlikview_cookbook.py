@@ -1,11 +1,12 @@
 import datetime
 import time
-from dataclasses import dataclass
 from typing import List
 
 import pandas as pd
+from rich.progress import track
 
-from program import (
+from common_scraping_utils import (
+    Blogpost,
     connect_and_store_metadata_to_db,
     flatten_nested_list,
     query_page_with_blog_posts,
@@ -14,31 +15,23 @@ from program import (
 URL = "https://qlikviewcookbook.com/"
 
 
-@dataclass
-class Blogpost:
-    author: str
-    title: str
-    url: str
-    publish_date: datetime.date
-    source: str
-    likes: int = 0
-    views: int = 0
-    scraped_date: datetime.date = datetime.date.today()
-
-
 def main():
     all_blog_posts: List = []
 
     soup = query_page_with_blog_posts(URL)
     last_page = get_last_pagenum_with_blog_posts(soup)
-    for page_num in range(1, last_page + 1):
+    # last_page=3 # Use to manually override number of pages that get scraped, useful while developing
+
+    for page_num in track(
+        range(1, last_page + 1), description="Scraping Qlikview Cookbook posts..."
+    ):
         page_soup = query_page_with_blog_posts(URL + "?_page=" + str(page_num))
         all_blog_posts.append(get_blog_posts_from_soup(page_soup))
         time.sleep(2)
 
     flat_list = flatten_nested_list(all_blog_posts)
     df = pd.DataFrame(flat_list)
-    connect_and_store_metadata_to_db(df, "qlikview_cookbook")
+    connect_and_store_metadata_to_db(df, "blog_posts", if_exist_solution="append")
 
 
 def get_last_pagenum_with_blog_posts(page_soup) -> int:
