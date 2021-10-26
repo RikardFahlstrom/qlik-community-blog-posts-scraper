@@ -8,7 +8,3 @@ def main():
     community_main()
     cookbook_main()
     print("Done")
-
-
-if __name__ == "__main__":
-    main()
