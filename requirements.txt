@@ -5,5 +5,5 @@ sqlalchemy
 pre-commit
 mypy
 types-requests
-tqdm
 datasette
+rich
