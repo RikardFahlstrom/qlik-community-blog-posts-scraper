@@ -31,7 +31,6 @@ def main():
 
     soup = query_page_with_blog_posts(URL)
     last_page = get_last_pagenum_with_blog_posts(soup)
-    # last_page = 3
     for page_num in range(1, last_page + 1):
         page_soup = query_page_with_blog_posts(URL + "?_page=" + str(page_num))
         all_blog_posts.append(get_blog_posts_from_soup(page_soup))
