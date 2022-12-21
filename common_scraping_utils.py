@@ -21,7 +21,8 @@ class Blogpost:
 
 
 def query_page_with_blog_posts(url_to_scrape: str) -> BeautifulSoup:
-    r = requests.get(url_to_scrape)
+    headers_dict = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0 Safari/537.36"}
+    r = requests.get(url_to_scrape, headers=headers_dict)
 
     assert r.status_code == 200
 
