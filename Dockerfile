@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.10-alpine
 
 RUN pip3 install -U pip setuptools wheel
 RUN pip3 install datasette datasette-vega
