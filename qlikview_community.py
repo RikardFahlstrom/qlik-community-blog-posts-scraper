@@ -41,7 +41,7 @@ def main():
 
 
 def extract_last_pagenum_with_blog_posts(
-    beautifulsoup_object_for_page: BeautifulSoup
+    beautifulsoup_object_for_page: BeautifulSoup,
 ) -> int:
     ul_tags = beautifulsoup_object_for_page.find_all(
         "ul", {"class": "lia-paging-full-pages"}
@@ -54,7 +54,7 @@ def extract_last_pagenum_with_blog_posts(
 
 
 def extract_blog_post_metadata(
-    beautifulsoup_object_for_page: BeautifulSoup
+    beautifulsoup_object_for_page: BeautifulSoup,
 ) -> List[Blogpost]:
     all_posts_on_page: List = []
 
@@ -62,6 +62,7 @@ def extract_blog_post_metadata(
         "ul", {"class": "discussion-list-container"}
     ):
         for litag in ultag.find_all("li", {"class": "blog-category scroll-class"}):
+            title = litag.find("h3").find("a").text
             all_a_tags = litag.find_all("a")
 
             for a_tag in all_a_tags:
@@ -87,7 +88,7 @@ def extract_blog_post_metadata(
             all_posts_on_page.append(
                 Blogpost(
                     author=author,
-                    title="N/A",
+                    title=title,
                     url=url,
                     publish_date=datetime.datetime.strptime(
                         created_date.strip(), "%Y-%m-%d"
